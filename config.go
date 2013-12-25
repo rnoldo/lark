@@ -6,34 +6,34 @@ import (
 	"strconv"
 )
 
-var (
-	settings Settings
-)
-
-type Settings struct {
+type Config struct {
 	Version string
 	Debug   bool
 	Redis   RedisSettings `toml:"redis"`
 }
 
-type RedisSettings struct {
+type RedisConfig struct {
 	Host     string
 	Port     string
 	DB       int
 	Password string
 }
 
-func (rs RedisSettings) Addr() string {
+func (rc RedisConfig) Addr() string {
 	return rs.Host + ":" + strconv.Itoa(rs.Port)
 }
 
-func init() {
+func InitConfig() config {
 	path = os.Getenv("LARK_CONF_PATH")
 	if len(path) == 0 {
 		path = "lark.conf"
 	}
 
-	if _, err := toml.DecodeFile(path, &settings); err != nil {
+	var config Config
+	if _, err := toml.DecodeFile(path, &config); err != nil {
 		panic("can't load config file")
 	}
+
+	return config
+
 }
