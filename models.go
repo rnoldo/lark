@@ -22,4 +22,5 @@ type Experiment struct {
 type Alternative struct {
 	experiment Experiment
 	name       string
+	is_winner bool
 }
